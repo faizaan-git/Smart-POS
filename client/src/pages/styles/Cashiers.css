@@ -1,0 +1,26 @@
+/* Cashiers page styles */
+[data-theme="dark"] .admin-cashiers-page {
+  background: var(--sp-bg) !important;
+  color: var(--sp-text);
+}
+
+[data-theme="dark"] .admin-cashiers-page > div {
+  background: var(--sp-surface) !important;
+  color: var(--sp-text);
+  border-color: var(--sp-border);
+  box-shadow: var(--sp-shadow) !important;
+}
+
+[data-theme="dark"] .admin-cashiers-page h1, [data-theme="dark"] .admin-cashiers-page h2, [data-theme="dark"] .admin-cashiers-page h3 {
+  color: var(--sp-text);
+}
+
+[data-theme="dark"] .admin-cashiers-page button[ type="button" ] {
+  color: var(--sp-text);
+}
+
+.app-page-content > .admin-cashiers-page {
+  box-sizing: border-box;
+  margin: 0 !important;
+  padding: 0 !important;
+}

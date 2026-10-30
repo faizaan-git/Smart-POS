@@ -1,0 +1,168 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  CASHIER
+  MANAGER
+}
+
+enum NotificationCategory {
+  LOW_STOCK
+  SALE
+  CUSTOMER
+}
+
+enum NotificationPriority {
+  HIGH
+  NORMAL
+  LOW
+}
+
+model User {
+  id          Int       @id @default(autoincrement())
+  name        String
+  email       String    @unique
+  password    String
+  role        Role      @default(ADMIN)
+  isBlocked   Boolean   @default(false)
+  isOnline    Boolean   @default(false)
+  lastSeenAt  DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  notifications Notification[]
+  salesAsCashier Sale[] @relation("SaleCashier")
+}
+
+model Product {
+  id            Int      @id @default(autoincrement())
+  name          String
+  barcode       String   @unique
+  category      String
+  purchasePrice Float
+  sellingPrice  Float
+  stock         Int
+  createdAt     DateTime @default(now())
+
+  saleItems SaleItem[]
+}
+
+model Sale {
+  id             Int      @id @default(autoincrement())
+
+  total          Float
+  subtotal       Float    @default(0)
+  taxAmount      Float    @default(0)
+  taxRate        Float    @default(0)
+  discountAmount Float    @default(0)
+  discountRate   Float    @default(0)
+  roundingAmount Float    @default(0)
+  invoiceNumber  String?
+  currency       String   @default("INR")
+
+  paymentMethod  String   @default("Cash")
+
+  cashReceived   Float?
+
+  createdAt      DateTime @default(now())
+
+  items          SaleItem[]
+
+  customerId     Int?
+  cashierId      Int?
+
+  customer       Customer? @relation(fields: [customerId], references: [id])
+  cashier        User?     @relation("SaleCashier", fields: [cashierId], references: [id], onDelete: SetNull)
+}
+
+model Notification {
+  id             Int                   @id @default(autoincrement())
+  userId         Int
+  category       NotificationCategory
+  priority       NotificationPriority  @default(NORMAL)
+  title          String
+  message        String
+  relatedType    String?
+  relatedId      Int?
+  dedupeKey      String?               @unique
+  createdAt      DateTime              @default(now())
+  readAt         DateTime?
+  archivedAt     DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, archivedAt, createdAt])
+  @@index([userId, readAt])
+}
+
+model SaleItem {
+  id Int @id @default(autoincrement())
+
+  saleId    Int
+  productId Int
+
+  quantity Int
+  price    Float
+
+  sale    Sale    @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+}
+
+model Customer {
+  id Int @id @default(autoincrement())
+
+  name String
+
+  phone String @unique
+
+  createdAt DateTime @default(now())
+
+  sales Sale[]
+}
+
+model BusinessSettings {
+  id           Int      @id @default(autoincrement())
+  businessName String?
+  ownerName    String?
+  phone        String?
+  email        String?
+  address      String?
+  gstNumber    String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model POSSettings {
+  id                  Int      @id @default(autoincrement())
+  enableTax           Boolean  @default(true)
+  defaultTaxRate      Float    @default(18)
+  enableDiscount      Boolean  @default(true)
+  defaultDiscount    Float    @default(0)
+  invoicePrefix       String   @default("INV-")
+  startingInvoiceNo   Int      @default(1001)
+  currency            String   @default("INR")
+  allowNegativeStock  Boolean  @default(false)
+  requireCustomer     Boolean  @default(false)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+model ReceiptSettings {
+  id                  Int      @id @default(autoincrement())
+  showBusinessName    Boolean  @default(true)
+  showGSTNumber       Boolean  @default(true)
+  showCustomerDetails Boolean  @default(true)
+  showCashierName     Boolean  @default(true)
+  showTaxBreakdown    Boolean  @default(true)
+  showDiscount        Boolean  @default(true)
+  receiptSize         String   @default("80mm")
+  footerMessage       String   @default("Thank you for shopping with us!")
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}

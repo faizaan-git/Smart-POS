@@ -1,0 +1,36 @@
+/* Sales page styles */
+[data-theme="dark"] .admin-sales-page {
+  background: var(--sp-bg) !important;
+  color: var(--sp-text);
+}
+
+[data-theme="dark"] .admin-sales-page > div:nth-of-type(1) {
+  background: var(--sp-surface) !important;
+  color: var(--sp-text);
+  border-color: var(--sp-border);
+  box-shadow: var(--sp-shadow) !important;
+}
+
+[data-theme="dark"] .admin-sales-page h1, [data-theme="dark"] .admin-sales-page h2 {
+  color: var(--sp-text);
+}
+
+.app-page-content > .admin-sales-page {
+  box-sizing: border-box;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.admin-sales-history-table {
+  border-collapse: separate !important;
+  border-spacing: 0;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.admin-sales-history-table th, .admin-sales-history-table td {
+  text-align: center;
+  vertical-align: middle;
+  border-bottom: 1px solid #e5e7eb;
+}

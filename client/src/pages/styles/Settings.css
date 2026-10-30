@@ -1,0 +1,553 @@
+/* =========================================================
+   SMARTPOS DARK THEME
+   ========================================================= */
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+/* Main Settings Page */
+html[data-theme="dark"] .settings-page {
+  background: #0f172a;
+  color: #f8fafc;
+}
+
+/* Header */
+html[data-theme="dark"] .settings-header h1 {
+  color: #f8fafc;
+}
+
+html[data-theme="dark"] .settings-header p {
+  color: #94a3b8;
+}
+
+/* Settings Cards */
+html[data-theme="dark"] .settings-card {
+  background: #1e293b;
+  border-color: #334155;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+}
+
+/* Card Header */
+html[data-theme="dark"] .settings-card-header {
+  border-bottom-color: #334155;
+}
+
+html[data-theme="dark"] .settings-card-header h2 {
+  color: #f8fafc;
+}
+
+html[data-theme="dark"] .settings-card-header p {
+  color: #94a3b8;
+}
+
+/* Settings Icons */
+html[data-theme="dark"] .settings-icon {
+  background: #334155;
+}
+
+/* Labels */
+html[data-theme="dark"] .settings-field label {
+  color: #e2e8f0;
+}
+
+/* Inputs */
+html[data-theme="dark"] .settings-field input,
+html[data-theme="dark"] .settings-field textarea,
+html[data-theme="dark"] .settings-field select,
+html[data-theme="dark"] .settings-option select {
+  background: #0f172a;
+  color: #f8fafc;
+  border-color: #475569;
+}
+
+/* Input Placeholder */
+html[data-theme="dark"] .settings-field input::placeholder,
+html[data-theme="dark"] .settings-field textarea::placeholder {
+  color: #64748b;
+}
+
+/* Input Focus */
+html[data-theme="dark"] .settings-field input:focus,
+html[data-theme="dark"] .settings-field textarea:focus,
+html[data-theme="dark"] .settings-field select:focus,
+html[data-theme="dark"] .settings-option select:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.15);
+  outline: none;
+}
+
+/* Disabled Inputs */
+html[data-theme="dark"] .settings-field input:disabled {
+  background: #172033;
+  color: #64748b;
+  cursor: not-allowed;
+}
+
+/* Option List */
+html[data-theme="dark"] .settings-option {
+  background: transparent;
+  border-color: #334155;
+}
+
+/* Option Titles */
+html[data-theme="dark"] .settings-option h3 {
+  color: #f1f5f9;
+}
+
+/* Option Description */
+html[data-theme="dark"] .settings-option p {
+  color: #94a3b8;
+}
+
+/* Switch */
+html[data-theme="dark"] .settings-switch span {
+  background: #475569;
+}
+
+html[data-theme="dark"] .settings-switch input:checked + span {
+  background: #2563eb;
+}
+
+/* Save Button */
+html[data-theme="dark"] .settings-save-button {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .settings-save-button:hover {
+  background: #1d4ed8;
+}
+
+/* Secondary Button */
+html[data-theme="dark"] .settings-secondary-button {
+  background: #334155;
+  color: #f8fafc;
+  border-color: #475569;
+}
+
+html[data-theme="dark"] .settings-secondary-button:hover {
+  background: #475569;
+}
+
+/* Actions */
+html[data-theme="dark"] .settings-actions {
+  border-top-color: #334155;
+}
+
+/* Loading */
+html[data-theme="dark"] .settings-loading {
+  color: #f8fafc;
+}
+
+html[data-theme="dark"] .settings-loading p {
+  color: #94a3b8;
+}
+
+/* Select Options */
+html[data-theme="dark"] select option {
+  background: #0f172a;
+  color: #f8fafc;
+}
+
+/* Scrollbar */
+html[data-theme="dark"] ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+html[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+html[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 10px;
+}
+
+html[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Settings page styles */
+.settings-page {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.settings-header {
+  margin-bottom: 24px;
+}
+
+.settings-header h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.settings-header p {
+  margin: 6px 0 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.settings-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.settings-card-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.settings-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f4f6;
+  font-size: 21px;
+}
+
+.settings-card-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.settings-card-header p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.settings-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.settings-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.settings-field-full {
+  grid-column: 1 / -1;
+}
+
+.settings-field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.settings-field input, .settings-field textarea, .settings-option select {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 11px 12px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.settings-field input:focus, .settings-field textarea:focus, .settings-option select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.settings-field textarea {
+  resize: vertical;
+}
+
+.settings-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+.settings-save-button {
+  border: none;
+  border-radius: 8px;
+  padding: 11px 18px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.settings-save-button:hover {
+  background: #1d4ed8;
+}
+
+.settings-option-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.settings-option:first-child {
+  padding-top: 0;
+}
+
+.settings-option:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.settings-option h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.settings-option p {
+  margin: 5px 0 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.settings-option select {
+  width: 220px;
+}
+
+.settings-secondary-button {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 9px 14px;
+  background: #ffffff;
+  color: #374151;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.settings-secondary-button:hover {
+  background: #f9fafb;
+}
+
+.settings-switch {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.settings-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.settings-switch span {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: #d1d5db;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.settings-switch span::before {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 3px;
+  top: 3px;
+  border-radius: 50%;
+  background: #ffffff;
+  transition: 0.2s ease;
+}
+
+.settings-switch input:checked + span {
+  background: #2563eb;
+}
+
+.settings-switch input:checked + span::before {
+  transform: translateX(22px);
+}
+
+  .settings-page {
+    padding: 16px;
+  }
+
+  .settings-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-field-full {
+    grid-column: auto;
+  }
+
+  .settings-option {
+    align-items: flex-start;
+  }
+
+  .settings-option select {
+    width: 180px;
+  }
+
+  .settings-card {
+    padding: 18px;
+  }
+
+  .settings-option {
+    flex-direction: column;
+  }
+
+  .settings-option select, .settings-secondary-button {
+    width: 100%;
+  }
+
+  .settings-actions {
+    justify-content: stretch;
+  }
+
+  .settings-save-button {
+    width: 100%;
+  }
+
+.settings-save-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.settings-loading {
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+}
+
+.settings-loading-icon {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.settings-field select {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 11px 12px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+}
+
+.settings-field select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.settings-field input:disabled {
+  background: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+[data-theme="dark"] .settings-card {
+  background: var(--sp-surface);
+  border-color: var(--sp-border);
+  box-shadow: var(--sp-shadow);
+}
+
+[data-theme="dark"] .settings-header h1, [data-theme="dark"] .settings-card-header h2, [data-theme="dark"] .settings-option h3 {
+  color: var(--sp-text);
+}
+
+[data-theme="dark"] .settings-header p, [data-theme="dark"] .settings-card-header p, [data-theme="dark"] .settings-option p {
+  color: var(--sp-text-muted);
+}
+
+[data-theme="dark"] .settings-icon {
+  background: var(--sp-surface-secondary);
+}
+
+[data-theme="dark"] .settings-field label {
+  color: var(--sp-text-secondary);
+}
+
+[data-theme="dark"] .settings-field input, [data-theme="dark"] .settings-field textarea, [data-theme="dark"] .settings-field select, [data-theme="dark"] .settings-option select {
+  background: var(--sp-input-bg);
+  border-color: var(--sp-border-secondary);
+  color: var(--sp-text);
+}
+
+[data-theme="dark"] .settings-field input:disabled {
+  background: #374151;
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .settings-option {
+  border-color: var(--sp-border);
+}
+
+[data-theme="dark"] .settings-secondary-button {
+  background: var(--sp-surface);
+  border-color: var(--sp-border-secondary);
+  color: var(--sp-text-secondary);
+}
+
+[data-theme="dark"] .settings-secondary-button:hover {
+  background: var(--sp-hover);
+}
+
+[data-theme="dark"] .settings-loading {
+  color: var(--sp-text-muted);
+}
+
+.app-page-content > .settings-page {
+  box-sizing: border-box;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.app-page-content > .settings-page {
+  width: 100%;
+  max-width: none;
+}
+
+.settings-card {
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}

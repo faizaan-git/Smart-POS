@@ -1,0 +1,16 @@
+/* Login page styles */
+.auth-page, .auth-page input, .auth-page textarea, .auth-page select {
+  color-scheme: light;
+}
+
+.page-title-auth {
+  margin-bottom: 0;
+  color: #111827;
+}
+
+@media screen and (max-width: 600px) {
+
+  .page-title-auth {
+    margin-bottom: 0;
+  }
+}

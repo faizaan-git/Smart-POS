@@ -1,0 +1,92 @@
+.dashboard-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.admin-dashboard-recent {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.admin-dashboard-recent table {
+  table-layout: fixed;
+}
+
+.sales-chart-card {
+  display: flex;
+  height: 350px;
+  min-height: 350px;
+  box-sizing: border-box;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 20px;
+  border: 1px solid var(--sp-border);
+  border-radius: 10px;
+  background: var(--sp-surface);
+  color: var(--sp-text);
+  box-shadow: var(--sp-shadow);
+}
+
+.sales-chart-card h3 {
+  flex: 0 0 auto;
+  margin: 0 0 16px;
+  color: var(--sp-text);
+}
+
+.sales-chart-canvas {
+  position: relative;
+  width: 100%;
+  min-height: 0;
+  flex: 1 1 auto;
+}
+
+.sales-chart-empty {
+  display: grid;
+  flex: 1 1 auto;
+  place-items: center;
+  margin: 0;
+  color: var(--sp-text-muted);
+}
+
+[data-theme="dark"] .admin-dashboard-page {
+  background: var(--sp-bg) !important;
+  color: var(--sp-text);
+}
+
+[data-theme="dark"] .admin-dashboard-recent {
+  background: var(--sp-surface) !important;
+  color: var(--sp-text);
+  border-color: var(--sp-border);
+  box-shadow: var(--sp-shadow) !important;
+}
+
+[data-theme="dark"] .admin-dashboard-page h1,
+[data-theme="dark"] .admin-dashboard-page h2 {
+  color: var(--sp-text);
+}
+
+.app-page-content > .admin-dashboard-page {
+  box-sizing: border-box;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+@media screen and (max-width: 950px) {
+  .dashboard-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .dashboard-stats-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .admin-dashboard-recent th,
+  .admin-dashboard-recent td {
+    padding: 8px 4px;
+    overflow-wrap: anywhere;
+    font-size: 12px;
+  }
+}

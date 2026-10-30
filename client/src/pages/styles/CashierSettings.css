@@ -1,0 +1,26 @@
+/* CashierSettings page styles */
+[data-theme="dark"] .cashier-settings-page {
+  color: var(--sp-text);
+}
+
+[data-theme="dark"] .cashier-settings-page p, [data-theme="dark"] .cashier-settings-page label {
+  color: var(--sp-text-secondary) !important;
+}
+
+[data-theme="dark"] .cashier-settings-page select {
+  background: var(--sp-input-bg) !important;
+  border-color: var(--sp-border-secondary) !important;
+  color: var(--sp-text);
+}
+
+[data-theme="dark"] .cashier-back-button {
+  background: var(--sp-surface) !important;
+  border-color: var(--sp-border-secondary) !important;
+  color: var(--sp-text) !important;
+}
+
+.app-page-content > .cashier-settings-page {
+  box-sizing: border-box;
+  margin: 0 !important;
+  padding: 0 !important;
+}

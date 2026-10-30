@@ -1,0 +1,184 @@
+.invoice-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow-y: auto;
+  background: rgba(15, 23, 42, 0.58);
+}
+
+.invoice-modal-card {
+  width: min(100%, 620px);
+  max-height: calc(100vh - 48px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #fff;
+  color: #172033;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.3);
+}
+
+.invoice-modal-document {
+  min-height: 0;
+  padding: 20px;
+  overflow: auto;
+}
+
+.invoice-modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 18px;
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.invoice-modal-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.invoice-modal-invoice {
+  width: 100% !important;
+  min-height: 320px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  color: #172033;
+}
+
+#invoice-print #thermal-receipt {
+  width: 100% !important;
+  max-width: 180mm;
+  box-sizing: border-box;
+  margin: 0 auto;
+  color: #172033 !important;
+}
+
+#root .invoice-modal-overlay #invoice-print #thermal-receipt table,
+#root .invoice-modal-overlay #invoice-print #thermal-receipt thead,
+#root .invoice-modal-overlay #invoice-print #thermal-receipt tbody,
+#root .invoice-modal-overlay #invoice-print #thermal-receipt tr,
+#root .invoice-modal-overlay #invoice-print #thermal-receipt th,
+#root .invoice-modal-overlay #invoice-print #thermal-receipt td {
+  background: #fff !important;
+  background-color: #fff !important;
+  color: #172033 !important;
+  border-color: #e2e8f0 !important;
+}
+
+#root .invoice-modal-overlay #invoice-print #thermal-receipt th {
+  background: #f1f5f9 !important;
+}
+
+.invoice-modal-card,
+[data-theme="dark"] .admin-layout-main .invoice-modal-overlay .invoice-modal-card {
+  border-color: #e2e8f0 !important;
+  background: #fff !important;
+  color: #172033 !important;
+}
+
+.invoice-modal-actions,
+[data-theme="dark"] .admin-layout-main .invoice-modal-overlay .invoice-modal-actions {
+  border-color: #e2e8f0 !important;
+  background: #f8fafc !important;
+}
+
+.invoice-modal-invoice,
+[data-theme="dark"] .admin-layout-main .invoice-modal-overlay .invoice-modal-invoice {
+  background: #fff !important;
+  color: #172033 !important;
+}
+
+.invoice-modal-invoice .invoice-modal-products-table,
+.invoice-modal-invoice .invoice-modal-products-table thead,
+.invoice-modal-invoice .invoice-modal-products-table tbody,
+.invoice-modal-invoice .invoice-modal-products-table tr,
+.invoice-modal-invoice .invoice-modal-product-heading,
+.invoice-modal-invoice .invoice-modal-product-cell,
+[data-theme="dark"] .admin-layout-main .invoice-modal-overlay .invoice-modal-invoice .invoice-modal-products-table,
+[data-theme="dark"] .admin-layout-main .invoice-modal-overlay .invoice-modal-invoice .invoice-modal-products-table thead,
+[data-theme="dark"] .admin-layout-main .invoice-modal-overlay .invoice-modal-invoice .invoice-modal-products-table tbody,
+[data-theme="dark"] .admin-layout-main .invoice-modal-overlay .invoice-modal-invoice .invoice-modal-products-table tr,
+[data-theme="dark"] .admin-layout-main .invoice-modal-overlay .invoice-modal-invoice .invoice-modal-product-heading,
+[data-theme="dark"] .admin-layout-main .invoice-modal-overlay .invoice-modal-invoice .invoice-modal-product-cell {
+  background-color: #fff !important;
+  color: #172033 !important;
+}
+
+#root .invoice-modal-overlay .invoice-modal-invoice .invoice-modal-products-table,
+#root .invoice-modal-overlay .invoice-modal-invoice .invoice-modal-products-table thead,
+#root .invoice-modal-overlay .invoice-modal-invoice .invoice-modal-products-table tbody,
+#root .invoice-modal-overlay .invoice-modal-invoice .invoice-modal-products-table tr,
+#root .invoice-modal-overlay .invoice-modal-invoice .invoice-modal-products-table th,
+#root .invoice-modal-overlay .invoice-modal-invoice .invoice-modal-products-table td,
+#root .invoice-modal-overlay .invoice-modal-invoice .invoice-modal-products-table tbody tr:hover th,
+#root .invoice-modal-overlay .invoice-modal-invoice .invoice-modal-products-table tbody tr:hover td {
+  background: #fff !important;
+  background-color: #fff !important;
+  color: #172033 !important;
+}
+
+.invoice-modal-invoice .invoice-modal-product-heading,
+.invoice-modal-invoice .invoice-modal-product-cell,
+[data-theme="dark"] .invoice-modal-invoice .invoice-modal-product-heading,
+[data-theme="dark"] .invoice-modal-invoice .invoice-modal-product-cell {
+  border-bottom: 1px solid #e2e8f0;
+}
+
+#root .invoice-modal-overlay .invoice-modal-invoice .invoice-modal-products-table th,
+#root .invoice-modal-overlay .invoice-modal-invoice .invoice-modal-products-table td {
+  border-color: #e2e8f0 !important;
+  text-align: inherit;
+}
+
+#root .invoice-modal-overlay .invoice-modal-invoice .invoice-modal-products-table th {
+  background: #f1f5f9 !important;
+  color: #172033 !important;
+}
+
+.invoice-modal-receipt {
+  width: max-content;
+  max-width: 100%;
+  margin: 0 auto;
+  overflow-x: auto;
+  border-radius: 8px;
+  background: #fff;
+  color: #000;
+}
+
+.invoice-modal-receipt #thermal-receipt {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+[data-theme="dark"] .admin-layout-main .invoice-modal-overlay .invoice-modal-invoice .invoice-modal-product-heading,
+[data-theme="dark"] .admin-layout-main .invoice-modal-overlay .invoice-modal-invoice .invoice-modal-product-cell {
+  border-color: #e2e8f0 !important;
+}
+
+@media screen and (max-width: 600px) {
+  .invoice-modal-overlay {
+    align-items: flex-start;
+    padding: 12px;
+  }
+
+  .invoice-modal-card {
+    max-height: calc(100vh - 24px);
+  }
+
+  .invoice-modal-document {
+    padding: 12px;
+  }
+
+  .invoice-modal-actions button {
+    flex: 1 1 calc(50% - 10px);
+  }
+}

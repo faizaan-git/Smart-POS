@@ -1,0 +1,22 @@
+/* Customers page styles */
+[data-theme="dark"] .admin-customers-page {
+  background: var(--sp-bg) !important;
+  color: var(--sp-text);
+}
+
+[data-theme="dark"] .admin-customers-table {
+  background: var(--sp-surface) !important;
+  color: var(--sp-text);
+  border-color: var(--sp-border);
+  box-shadow: var(--sp-shadow) !important;
+}
+
+[data-theme="dark"] .admin-customers-page h1, [data-theme="dark"] .admin-customers-page h2 {
+  color: var(--sp-text);
+}
+
+.app-page-content > .admin-customers-page {
+  box-sizing: border-box;
+  margin: 0 !important;
+  padding: 0 !important;
+}

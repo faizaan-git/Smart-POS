@@ -1,0 +1,147 @@
+@media print {
+
+  @page {
+    size: A4 portrait;
+    margin: 12mm;
+  }
+
+  body * {
+    visibility: hidden !important;
+  }
+
+  .printable-report,
+  .printable-report * {
+    visibility: visible !important;
+  }
+
+  .printable-report {
+  position: absolute !important;
+
+  top: 0 !important;
+  left: 50% !important;
+
+  width: 186mm !important;
+  min-height: 273mm !important;
+
+  transform: translateX(-50%) !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  background: #ffffff !important;
+
+  border: none !important;
+  box-shadow: none !important;
+}
+  .print-header {
+    text-align: center !important;
+    margin-bottom: 12px !important;
+  }
+
+  .print-header h1 {
+    font-size: 22px !important;
+    margin: 0 !important;
+  }
+
+  .print-header h2 {
+    font-size: 16px !important;
+    margin: 3px 0 !important;
+  }
+
+  .print-header p {
+    font-size: 10px !important;
+    margin: 3px 0 !important;
+  }
+
+  .summary-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+    width: 100% !important;
+    margin-bottom: 12px !important;
+  }
+
+  .summary-card {
+    padding: 9px !important;
+    border: 1px solid #ccc !important;
+    background: #fff !important;
+    box-shadow: none !important;
+  }
+
+  .summary-icon {
+    display: none !important;
+  }
+
+  .table-header {
+    margin-bottom: 6px !important;
+  }
+
+  .table-header h2 {
+    font-size: 15px !important;
+    margin: 0 !important;
+  }
+
+  .table-header p {
+    font-size: 9px !important;
+    margin: 2px 0 !important;
+  }
+
+  .sales-table-wrapper {
+    width: 100% !important;
+    overflow: visible !important;
+  }
+
+  .sales-table {
+    width: 100% !important;
+    min-width: 0 !important;
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+  }
+
+  .sales-table th,
+  .sales-table td {
+    padding: 6px 7px !important;
+    font-size: 9px !important;
+    border: 1px solid #ccc !important;
+    white-space: nowrap !important;
+  }
+
+  .sales-table th:nth-child(1),
+  .sales-table td:nth-child(1) {
+    width: 10% !important;
+  }
+
+  .sales-table th:nth-child(2),
+  .sales-table td:nth-child(2) {
+    width: 28% !important;
+  }
+
+  .sales-table th:nth-child(3),
+  .sales-table td:nth-child(3) {
+    width: 17% !important;
+  }
+
+  .sales-table th:nth-child(4),
+  .sales-table td:nth-child(4) {
+    width: 15% !important;
+  }
+
+  .sales-table th:nth-child(5),
+  .sales-table td:nth-child(5) {
+    width: 30% !important;
+  }
+
+  .customer-avatar {
+    display: none !important;
+  }
+
+  .payment-badge {
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+  }
+
+  * {
+    box-shadow: none !important;
+  }
+}
