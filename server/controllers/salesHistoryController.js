@@ -7,6 +7,10 @@ exports.getSalesHistory = async (req, res) => {
   try {
 
     const sales = await prisma.sale.findMany({
+      where: {
+        merchantId: req.user.merchantId,
+        paymentStatus: "PAID",
+      },
 
       orderBy: {
         createdAt: "desc"

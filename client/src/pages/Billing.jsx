@@ -3,9 +3,9 @@ import api from "../services/api";
 import { toast } from "react-toastify";
 
 import SearchBar from "../components/SearchBar";
-import ProductList from "../components/ProductList";
 import Cart from "../components/Cart";
 import Payment from "../components/Payment";
+import UPIPaymentModal from "../components/UPIPaymentModal";
 import PageTitle from "../components/PageTitle";
 import { getCashierPreferences } from "../services/cashierPreferences";
 import { subscribeToBusinessSettings } from "../services/businessSettingsEvents";
@@ -55,6 +55,40 @@ const createHeldBill = ({ cart, selectedCustomer, paymentMethod, cashReceived })
   cashReceived,
 });
 
+const playProductAddedBeep = async () => {
+  const AudioContext = window.AudioContext;
+  if (!AudioContext) return;
+
+  let audioContext;
+  try {
+    audioContext = new AudioContext();
+    await audioContext.resume();
+
+    const oscillator = audioContext.createOscillator();
+    const volume = audioContext.createGain();
+    oscillator.type = "sine";
+    oscillator.frequency.value = 880;
+    volume.gain.setValueAtTime(0.12, audioContext.currentTime);
+    volume.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.12);
+    oscillator.connect(volume);
+    volume.connect(audioContext.destination);
+    oscillator.onended = () => {
+      void audioContext.close().catch((error) => {
+        console.warn("Could not close product scan audio:", error);
+      });
+    };
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + 0.12);
+  } catch (error) {
+    if (audioContext && audioContext.state !== "closed") {
+      await audioContext.close().catch((closeError) => {
+        console.warn("Could not close product scan audio:", closeError);
+      });
+    }
+    console.warn("Could not play product scan confirmation sound:", error);
+  }
+};
+
 function Billing({ isCashier = false, onOpenSettings }) {
   const [heldBillsStorageKey] = useState(getHeldBillsStorageKey);
   const [heldBills, setHeldBills] = useState(() => readHeldBills(heldBillsStorageKey));
@@ -77,8 +111,6 @@ function Billing({ isCashier = false, onOpenSettings }) {
   const [receiptSettings, setReceiptSettings] = useState({});
   const [billingSettingsLoaded, setBillingSettingsLoaded] = useState(false);
 
-  const [search, setSearch] = useState("");
-
   const [barcode, setBarcode] = useState("");
   const [scannerConnected, setScannerConnected] = useState(false);
   const scannerKeySequence = useRef({ count: 0, lastKeyAt: 0 });
@@ -92,6 +124,8 @@ function Billing({ isCashier = false, onOpenSettings }) {
   const [paymentMethod, setPaymentMethod] = useState(
     () => getCashierPreferences().defaultPaymentMethod
   );
+  const [upiPayment, setUpiPayment] = useState(null);
+  const upiRequestIdRef = useRef(null);
 
   const markScannerDetected = useCallback(() => {
     setScannerConnected(true);
@@ -127,7 +161,6 @@ function Billing({ isCashier = false, onOpenSettings }) {
     setSelectedCustomer("");
     setCashReceived("");
     setPaymentMethod(getCashierPreferences().defaultPaymentMethod);
-    setSearch("");
     setBarcode("");
   };
 
@@ -167,7 +200,6 @@ function Billing({ isCashier = false, onOpenSettings }) {
     setPaymentMethod(heldBill.paymentMethod || getCashierPreferences().defaultPaymentMethod);
     setCashReceived(heldBill.cashReceived || "");
     setShowHeldBills(false);
-    setSearch("");
     setBarcode("");
     toast.success(cart.length > 0
       ? "Previous bill held and selected bill restored."
@@ -250,7 +282,9 @@ function Billing({ isCashier = false, onOpenSettings }) {
         if (active) {
           toast.error("Failed to load billing and receipt settings. Reload before completing a sale.");
         }
+
       }
+
     };
 
     void loadInitialData();
@@ -259,43 +293,6 @@ function Billing({ isCashier = false, onOpenSettings }) {
       unsubscribeFromBusinessSettings();
     };
   }, []);
-
-
-
-
-
-  // Filter Products
-
-  const filteredProducts = products.filter((product)=>{
-
-    const key =
-      search.toLowerCase();
-
-
-    return (
-
-      product.name
-      .toLowerCase()
-      .includes(key)
-
-
-      ||
-
-      product.category
-      .toLowerCase()
-      .includes(key)
-
-
-      ||
-
-      product.barcode
-      .includes(key)
-
-    );
-
-  });
-
-
 
 
 
@@ -332,6 +329,7 @@ function Billing({ isCashier = false, onOpenSettings }) {
         : [...current, { ...product, qty: 1 }];
     });
 
+    void playProductAddedBeep();
     toast.success(`${product.name} added`);
     return true;
   };
@@ -531,7 +529,11 @@ function Billing({ isCashier = false, onOpenSettings }) {
 
     if (
       cashierPreferences.confirmSale &&
-      !window.confirm("Complete this sale?")
+      !window.confirm(
+        paymentMethod === "UPI"
+          ? "Create a pending UPI payment request?"
+          : "Complete this sale?"
+      )
     ) {
       return;
     }
@@ -557,6 +559,25 @@ function Billing({ isCashier = false, onOpenSettings }) {
 
 
 
+
+    if (paymentMethod === "UPI") {
+      try {
+        if (!upiRequestIdRef.current) {
+          upiRequestIdRef.current = window.crypto.randomUUID();
+        }
+        const response = await api.post("/payments/upi/create", {
+          cart,
+          paymentMethod: "UPI",
+          idempotencyKey: upiRequestIdRef.current,
+          customerId: selectedCustomer ? Number(selectedCustomer) : null,
+        });
+        setUpiPayment(response.data);
+      } catch (error) {
+        console.error("Could not start UPI payment:", error);
+        toast.error(error.response?.data?.message || "Failed to start UPI payment");
+      }
+      return;
+    }
 
     let receiptWindow = null;
 
@@ -650,6 +671,51 @@ function Billing({ isCashier = false, onOpenSettings }) {
 
   };
 
+  const handleVerifiedUpiPayment = (sale) => {
+    setUpiPayment((current) => current ? { ...current, sale } : current);
+    setCurrentCart([]);
+    setCashReceived("");
+    setPaymentMethod(getCashierPreferences().defaultPaymentMethod);
+    setSelectedCustomer("");
+    upiRequestIdRef.current = null;
+    loadProducts();
+    toast.success("UPI payment approved; bill completed");
+  };
+
+  const printUpiReceipt = (sale, receiptWindow) => {
+    try {
+      const currentUser = JSON.parse(sessionStorage.getItem("user") || "null");
+      const receiptMarkup = getThermalReceiptMarkup(sale, {
+        business: {
+          ...businessSettings,
+          businessName: upiPayment?.payment?.businessName || businessSettings.businessName,
+        },
+        posSettings,
+        receiptSettings,
+        cashierName: currentUser?.name || "",
+      });
+      const receiptSize = receiptSettings.receiptSize || "80mm";
+      receiptWindow.document.open();
+      receiptWindow.document.write(`<!doctype html>
+        <html>
+          <head>
+            <title>SmartPOS Receipt</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <style>${getReceiptPrintStyles(receiptSize)}</style>
+          </head>
+          <body>${receiptMarkup}</body>
+        </html>`);
+      receiptWindow.document.close();
+      receiptWindow.focus();
+      receiptWindow.onafterprint = () => receiptWindow.close();
+      receiptWindow.setTimeout(() => receiptWindow.print(), 400);
+    } catch (printError) {
+      console.error("Failed to prepare approved UPI receipt:", printError);
+      if (receiptWindow && !receiptWindow.closed) receiptWindow.close();
+      toast.error("Payment is approved, but the receipt could not be prepared.");
+    }
+  };
+
 
 
 
@@ -659,6 +725,18 @@ function Billing({ isCashier = false, onOpenSettings }) {
   return (
 
     <div className={`billing-page${isCashier ? " cashier-billing" : ""}`}>
+      {upiPayment?.payment && (
+        <UPIPaymentModal
+          payment={upiPayment.payment}
+          sale={upiPayment.sale}
+          onPaymentComplete={handleVerifiedUpiPayment}
+          onPrintReceipt={printUpiReceipt}
+          onClose={() => {
+            setUpiPayment(null);
+            upiRequestIdRef.current = null;
+          }}
+        />
+      )}
       <header className="billing-header">
         <div>
           <PageTitle icon={<AppIcon name="cart" />} className="page-title-compact">New sale</PageTitle>
@@ -850,8 +928,9 @@ function Billing({ isCashier = false, onOpenSettings }) {
       )}
 
       <SearchBar
-        search={search}
-        setSearch={setSearch}
+        products={products}
+        addToCart={addToCart}
+        currency={posSettings.currency}
         barcode={barcode}
         setBarcode={setBarcode}
         scanBarcode={scanBarcode}
@@ -860,36 +939,24 @@ function Billing({ isCashier = false, onOpenSettings }) {
       />
 
       <div className="billing-workspace">
-        <ProductList
-          products={filteredProducts}
-          addToCart={addToCart}
+        <Cart
+          cart={cart}
+          increaseQty={increaseQty}
+          decreaseQty={decreaseQty}
           currency={posSettings.currency}
-          restoreBarcodeFocus={() => scannerInputRef.current?.focus()}
+          scannerConnected={scannerConnected}
         />
-
-        <aside className="billing-checkout">
-          <Cart
-            cart={cart}
-            increaseQty={increaseQty}
-            decreaseQty={decreaseQty}
-            currency={posSettings.currency}
-            scannerConnected={scannerConnected}
-          />
-          <Payment
-            total={total}
-            amounts={amounts}
-            currency={posSettings.currency}
-            settingsLoaded={billingSettingsLoaded}
-
-            cashReceived={cashReceived}
-
-            setCashReceived={setCashReceived}
-
-            paymentMethod={paymentMethod}
-            setPaymentMethod={setPaymentMethod}
-            completeSale={completeSale}
-          />
-        </aside>
+        <Payment
+          total={total}
+          amounts={amounts}
+          currency={posSettings.currency}
+          settingsLoaded={billingSettingsLoaded}
+          cashReceived={cashReceived}
+          setCashReceived={setCashReceived}
+          paymentMethod={paymentMethod}
+          setPaymentMethod={setPaymentMethod}
+          completeSale={completeSale}
+        />
       </div>
     </div>
 

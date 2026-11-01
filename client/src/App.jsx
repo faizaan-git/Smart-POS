@@ -12,6 +12,7 @@ const Settings = lazy(() => import("./pages/Settings"));
 const Cashiers = lazy(() => import("./pages/Cashiers"));
 const Managers = lazy(() => import("./pages/Managers"));
 const CashierSettings = lazy(() => import("./pages/CashierSettings"));
+const UPIPaymentSettings = lazy(() => import("./pages/UPIPaymentSettings"));
 const Login = lazy(() => import("./pages/Login"));
 import api from "./services/api";
 import { getThemePreference, saveThemePreference } from "./services/themePreferences";
@@ -30,6 +31,21 @@ const notifySessionClosed = (token) =>
     }
   });
 
+const pagesByRole = {
+  ADMIN: ["dashboard", "billing", "products", "sales", "reports", "customers", "cashiers", "managers", "upi-history", "settings"],
+  MANAGER: ["dashboard", "billing", "products", "sales", "reports", "customers"],
+  CASHIER: ["billing", "cashier-settings"],
+};
+
+const getPageStorageKey = (user) => `smartpos-current-page-${user?.id || user?.role || "guest"}`;
+
+const getInitialPage = (user) => {
+  const allowedPages = pagesByRole[user?.role] || pagesByRole.ADMIN;
+  const savedPage = sessionStorage.getItem(getPageStorageKey(user));
+  if (allowedPages.includes(savedPage)) return savedPage;
+  return user?.role === "CASHIER" ? "billing" : "dashboard";
+};
+
 function App() {
   const currentUser = JSON.parse(sessionStorage.getItem("user") || "null");
   const isCashier = currentUser?.role === "CASHIER";
@@ -40,7 +56,13 @@ function App() {
   );
   const [blockedByAdmin, setBlockedByAdmin] = useState(false);
 
-  const [page, setPage] = useState("dashboard");
+  const [page, setPage] = useState(() => getInitialPage(currentUser));
+  const changePage = (nextPage) => {
+    const allowedPages = pagesByRole[currentUser?.role] || pagesByRole.ADMIN;
+    if (!allowedPages.includes(nextPage)) return;
+    sessionStorage.setItem(getPageStorageKey(currentUser), nextPage);
+    setPage(nextPage);
+  };
 
   useEffect(() => {
     if (!isLoggedIn || (!isCashier && !isManager)) {
@@ -157,6 +179,7 @@ function App() {
       getThemePreference(user)
     );
     setIsLoggedIn(true);
+    sessionStorage.setItem(getPageStorageKey(user), nextPage);
     setPage(nextPage);
   };
 
@@ -184,6 +207,7 @@ function App() {
 
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("user");
+    sessionStorage.removeItem(getPageStorageKey(currentUser));
 
     setIsLoggedIn(false);
     setBlockedByAdmin(false);
@@ -222,13 +246,13 @@ function App() {
   const renderPage = () => {
     if (isCashier) {
       if (page === "cashier-settings") {
-        return <CashierSettings onBack={() => setPage("billing")} />;
+        return <CashierSettings onBack={() => changePage("billing")} />;
       }
 
       return (
         <Billing
           isCashier
-          onOpenSettings={() => setPage("cashier-settings")}
+          onOpenSettings={() => changePage("cashier-settings")}
         />
       );
     }
@@ -279,6 +303,9 @@ function App() {
       case "settings":
         return <Settings />;
 
+      case "upi-history":
+        return <UPIPaymentSettings historyOnly />;
+
       default:
         return <Dashboard />;
     }
@@ -291,7 +318,7 @@ function App() {
   return (
     <Layout
       page={page}
-      setPage={setPage}
+      setPage={changePage}
       onLogout={handleLogout}
       isCashier={isCashier}
       isManager={isManager}

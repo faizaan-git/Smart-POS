@@ -103,10 +103,14 @@ function Payment({
         disabled={!settingsLoaded || total <= 0 || insufficientCash}
       >
         <AppIcon name="check" />
-        Complete sale
+        {paymentMethod === "UPI" ? "Create UPI payment" : "Complete sale"}
       </button>
       <p className="billing-secure-note">
-        {settingsLoaded ? "Sale and inventory are saved together." : "Loading billing settings…"}
+        {!settingsLoaded
+          ? "Loading billing settings…"
+          : paymentMethod === "UPI"
+            ? "Approve the UPI payment after confirming it was received."
+            : "Sale and inventory are saved together."}
       </p>
     </section>
   );

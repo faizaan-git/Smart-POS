@@ -60,19 +60,21 @@ exports.getDashboardStats = async (req, res) => {
         },
       }),
 
-      prisma.user.count({ where: { role: "CASHIER" } }),
+      prisma.user.count({ where: { role: "CASHIER", merchantId: req.user.merchantId } }),
       prisma.user.count({
         where: {
           role: "CASHIER",
+          merchantId: req.user.merchantId,
           isOnline: true,
           isBlocked: false,
           lastSeenAt: { gte: onlineSince },
         },
       }),
-      prisma.user.count({ where: { role: "MANAGER" } }),
+      prisma.user.count({ where: { role: "MANAGER", merchantId: req.user.merchantId } }),
       prisma.user.count({
         where: {
           role: "MANAGER",
+          merchantId: req.user.merchantId,
           isOnline: true,
           isBlocked: false,
           lastSeenAt: { gte: onlineSince },
@@ -80,10 +82,11 @@ exports.getDashboardStats = async (req, res) => {
       }),
 
       // Total Sales
-      prisma.sale.count(),
+      prisma.sale.count({ where: { merchantId: req.user.merchantId, paymentStatus: "PAID" } }),
 
       // Total Revenue
       prisma.sale.aggregate({
+        where: { merchantId: req.user.merchantId, paymentStatus: "PAID" },
         _sum: {
           total: true,
         },
@@ -92,6 +95,8 @@ exports.getDashboardStats = async (req, res) => {
       // Today's Sales
       prisma.sale.findMany({
         where: {
+          merchantId: req.user.merchantId,
+          paymentStatus: "PAID",
           createdAt: {
             gte: today,
           },
@@ -100,6 +105,7 @@ exports.getDashboardStats = async (req, res) => {
 
       // Recent Sales
       prisma.sale.findMany({
+        where: { merchantId: req.user.merchantId, paymentStatus: "PAID" },
         take: 5,
         orderBy: {
           createdAt: "desc",
@@ -111,6 +117,7 @@ exports.getDashboardStats = async (req, res) => {
 
       // Payment Method Statistics
       prisma.sale.groupBy({
+        where: { merchantId: req.user.merchantId, paymentStatus: "PAID" },
         by: ["paymentMethod"],
         _count: {
           paymentMethod: true,
@@ -138,6 +145,8 @@ exports.getDashboardStats = async (req, res) => {
 
       const sales = await prisma.sale.findMany({
         where: {
+          merchantId: req.user.merchantId,
+          paymentStatus: "PAID",
           createdAt: {
             gte: day,
             lt: nextDay,

@@ -1,0 +1,208 @@
+.upi-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1400;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  padding: 20px;
+  background: rgb(15 23 42 / 72%);
+}
+
+.upi-payment-modal {
+  width: min(100%, 560px);
+  max-height: calc(100vh - 40px);
+  overflow: auto;
+  padding: 28px;
+  color: var(--sp-text, #172033);
+  background: var(--sp-surface, #fff);
+  border-radius: 18px;
+  box-shadow: 0 24px 80px rgb(0 0 0 / 28%);
+}
+
+.upi-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.upi-brand {
+  margin: 0 0 6px;
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+
+.upi-modal-header h2 {
+  margin: 0;
+  font-size: 22px;
+  color: var(--sp-text, #172033);
+}
+
+.upi-merchant-business-name {
+  color: var(--sp-text, #172033);
+  font-size: 16px;
+  letter-spacing: 0;
+}
+
+.upi-close-button,
+.upi-merchant-details button,
+.upi-final-status button,
+.upi-approve-button {
+  border: 0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #fff;
+  background: #2563eb;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.upi-approve-button {
+  display: block;
+  width: 100%;
+  margin: 14px auto 0;
+  background: #15803d;
+}
+
+.upi-approve-button:disabled {
+  cursor: wait;
+  opacity: .7;
+}
+
+.upi-payment-amount {
+  display: grid;
+  gap: 5px;
+  justify-items: center;
+  margin: 22px 0 16px;
+}
+
+.upi-payment-amount span {
+  color: var(--sp-text-muted, #64748b);
+}
+
+.upi-payment-amount strong {
+  font-size: 36px;
+  letter-spacing: -.04em;
+}
+
+.upi-payment-qr {
+  display: block;
+  width: min(300px, 72vw);
+  height: auto;
+  margin: 0 auto 16px;
+  padding: 12px;
+  border: 1px solid var(--sp-border, #e2e8f0);
+  border-radius: 12px;
+}
+
+.upi-merchant-details {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 12px;
+  margin: 12px 0;
+}
+
+.upi-merchant-details span {
+  color: var(--sp-text-muted, #64748b);
+}
+
+.upi-merchant-details strong {
+  overflow-wrap: anywhere;
+}
+
+.upi-merchant-details button {
+  padding: 6px 10px;
+}
+
+.upi-open-app {
+  display: block;
+  width: fit-content;
+  margin: 12px auto;
+  color: #1d4ed8;
+  font-weight: 700;
+}
+
+.upi-instructions {
+  padding: 12px;
+  color: var(--sp-text-secondary, #374151);
+  white-space: pre-wrap;
+  background: var(--sp-surface-secondary, #f8fafc);
+  border-radius: 8px;
+}
+
+.upi-steps {
+  padding-left: 22px;
+  color: var(--sp-text-secondary, #475569);
+  line-height: 1.7;
+}
+
+.upi-pending-notice {
+  padding: 12px;
+  color: #92400e;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  font-weight: 650;
+}
+
+.upi-status-line {
+  text-align: center;
+  color: #a16207;
+  font-weight: 800;
+}
+
+.upi-final-status {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  padding: 24px 8px 8px;
+  text-align: center;
+}
+
+.upi-success-status strong {
+  color: #15803d;
+  font-size: 20px;
+}
+
+.upi-failed-status strong {
+  color: #b91c1c;
+  font-size: 20px;
+}
+
+[data-theme="dark"] .upi-payment-modal {
+  border: 1px solid var(--sp-border);
+}
+
+[data-theme="dark"] .upi-pending-notice {
+  color: #fde68a;
+  background: #422006;
+  border-color: #854d0e;
+}
+
+[data-theme="dark"] .upi-status-line {
+  color: #fde68a;
+}
+
+[data-theme="dark"] .upi-success-status strong {
+  color: #86efac;
+}
+
+[data-theme="dark"] .upi-approve-button {
+  background: #166534;
+}
+
+[data-theme="dark"] .upi-failed-status strong {
+  color: #fca5a5;
+}
+
+@media (max-width: 520px) {
+  .upi-payment-modal {
+    padding: 20px 16px;
+  }
+
+}

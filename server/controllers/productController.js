@@ -116,7 +116,7 @@ const addProduct = async (req, res) => {
     });
 
     if (product.stock <= LOW_STOCK_THRESHOLD) {
-      await notifyLowStock(prisma, product);
+      await notifyLowStock(prisma, product, req.user.merchantId);
     }
 
     res.status(201).json(product);
@@ -162,7 +162,7 @@ const updateProduct = async (req, res) => {
       existingProduct.stock > LOW_STOCK_THRESHOLD &&
       product.stock <= LOW_STOCK_THRESHOLD
     ) {
-      await notifyLowStock(prisma, product);
+      await notifyLowStock(prisma, product, req.user.merchantId);
     } else if (
       existingProduct &&
       existingProduct.stock <= LOW_STOCK_THRESHOLD &&

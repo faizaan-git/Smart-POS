@@ -395,6 +395,84 @@
   margin-bottom: 18px;
 }
 
+.billing-product-search {
+  position: relative;
+  min-width: 0;
+}
+
+.billing-product-search-results {
+  position: absolute;
+  z-index: 10;
+  top: calc(100% + 6px);
+  right: 0;
+  left: 0;
+  max-height: 320px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 5px;
+  list-style: none;
+  border: 1px solid var(--billing-border);
+  border-radius: 10px;
+  background: var(--billing-card);
+  box-shadow: 0 12px 28px rgb(15 23 42 / 14%);
+}
+
+.billing-product-search-results li + li {
+  border-top: 1px solid var(--billing-border);
+}
+
+.billing-product-search-results button {
+  display: flex;
+  width: 100%;
+  min-height: 54px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 8px 10px;
+  border: 0;
+  background: transparent;
+  color: var(--sp-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.billing-product-search-results button:hover,
+.billing-product-search-results button:focus-visible {
+  border-radius: 6px;
+  background: var(--billing-surface);
+  outline: none;
+}
+
+.billing-product-search-copy {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.billing-product-search-copy strong,
+.billing-product-search-copy small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.billing-product-search-copy small,
+.billing-product-search-empty {
+  color: var(--billing-muted);
+  font-size: 12px;
+}
+
+.billing-product-search-price {
+  flex: 0 0 auto;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.billing-product-search-empty {
+  padding: 12px 10px;
+}
+
 .billing-scanner-status {
   display: flex;
   align-items: center;
@@ -436,6 +514,10 @@
   display: flex;
   min-width: 0;
   gap: 8px;
+}
+
+.billing-barcode-field {
+  flex: 1;
 }
 
 .billing-camera-button {
@@ -525,12 +607,6 @@
   grid-template-columns: minmax(0, 1fr) minmax(340px, 410px);
   align-items: start;
   gap: 18px;
-}
-
-.billing-checkout {
-  display: grid;
-  gap: 16px;
-  min-width: 0;
 }
 
 .billing-panel {
@@ -1119,21 +1195,9 @@
 }
 
 @media (max-width: 1050px) {
-  .billing-workspace,
-  .billing-search-row {
+  .billing-workspace {
     grid-template-columns: minmax(0, 1fr) minmax(310px, 360px);
     gap: 14px;
-  }
-
-  .billing-product-table th,
-  .billing-product-table td {
-    padding-right: 10px;
-    padding-left: 10px;
-  }
-
-  .billing-product-table th:first-child,
-  .billing-product-table td:first-child {
-    padding-left: 14px;
   }
 }
 
@@ -1141,11 +1205,6 @@
   .billing-workspace,
   .billing-search-row {
     grid-template-columns: 1fr;
-  }
-
-  .billing-checkout {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    align-items: start;
   }
 }
 
@@ -1200,10 +1259,6 @@
 
   .billing-new-customer-form > button {
     width: 100%;
-  }
-
-  .billing-checkout {
-    grid-template-columns: 1fr;
   }
 
   .billing-barcode-controls {

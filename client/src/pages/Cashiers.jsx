@@ -227,9 +227,10 @@ export function EmployeeManagement({ role }) {
           </div>
           <button
             type="button"
+            className="employee-list-refresh"
             onClick={refreshEmployees}
             disabled={refreshing}
-            style={{ padding: "9px 14px", border: "1px solid #d1d5db", borderRadius: "6px", background: "#fff", cursor: refreshing ? "wait" : "pointer" }}
+            style={{ cursor: refreshing ? "wait" : "pointer" }}
           >
             {refreshing ? "Refreshing..." : "Refresh"}
           </button>

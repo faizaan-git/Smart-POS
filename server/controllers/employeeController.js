@@ -20,7 +20,7 @@ const createEmployeeController = (role, label) => {
     listEmployees: async (req, res) => {
       try {
         const employees = await prisma.user.findMany({
-          where: { role },
+          where: { role, merchantId: req.user.merchantId },
           orderBy: { createdAt: "desc" },
         });
 
@@ -65,6 +65,7 @@ const createEmployeeController = (role, label) => {
             email: normalizedEmail,
             password: passwordHash,
             role,
+            merchantId: req.user.merchantId,
             isBlocked: false,
             isOnline: false,
           },
@@ -83,7 +84,9 @@ const createEmployeeController = (role, label) => {
     toggleEmployeeBlock: async (req, res) => {
       try {
         const id = Number(req.params.id);
-        const employee = await prisma.user.findUnique({ where: { id } });
+        const employee = await prisma.user.findFirst({
+          where: { id, merchantId: req.user.merchantId },
+        });
 
         if (!employee || employee.role !== role) {
           return res.status(404).json({ message: `${label} not found` });
@@ -112,7 +115,9 @@ const createEmployeeController = (role, label) => {
     removeEmployee: async (req, res) => {
       try {
         const id = Number(req.params.id);
-        const employee = await prisma.user.findUnique({ where: { id } });
+        const employee = await prisma.user.findFirst({
+          where: { id, merchantId: req.user.merchantId },
+        });
 
         if (!employee || employee.role !== role) {
           return res.status(404).json({ message: `${label} not found` });

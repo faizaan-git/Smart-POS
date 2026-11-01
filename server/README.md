@@ -19,3 +19,31 @@ current password and an authenticated session, and unverified public password
 resets are disabled. Users who cannot sign in must contact their administrator.
 
 Run the server tests with `npm test`.
+
+## Merchant UPI payments
+
+Apply database changes before starting the updated server. The migration keeps
+existing records and assigns the current users and sales to one initial
+merchant; it does not invent or enable UPI details.
+
+```powershell
+Set-Location server
+npx prisma migrate deploy
+npx prisma generate
+```
+
+Each merchant administrator can configure their own UPI and bank details from
+**Settings → UPI Payment Settings**. Administrators can create a separate merchant by
+registering a new ADMIN account; employees created by that administrator are
+assigned to that merchant. Payment settings and payment/sales history are
+restricted to the authenticated user's merchant.
+
+UPI is an initiation-only QR/payment link. New UPI bills remain pending and do
+not reduce inventory or count as completed sales until staff approve them in
+SmartPOS after confirming payment was received. SmartPOS does not automatically
+verify UPI payments. Approval records the staff member and timestamp, completes
+the bill, and opens the thermal receipt for printing. UTR entry and an
+administrator approval queue are not required. Administrators can view
+read-only UPI history from the sidebar item below **Managers**.
+Cash and card continue through the existing immediate-completion workflow.
+There is no gateway or automatic bank confirmation.

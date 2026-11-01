@@ -1,4 +1,5 @@
 import AppIcon from "./AppIcon";
+import "./Sidebar.css";
 
 function Sidebar({ page, setPage, isCashier, isManager }) {
   const menuItems = isCashier
@@ -24,16 +25,16 @@ function Sidebar({ page, setPage, isCashier, isManager }) {
         { key: "customers", icon: "users", label: "Customers" },
         { key: "cashiers", icon: "user", label: "Cashiers" },
         { key: "managers", icon: "manager", label: "Managers" },
+        { key: "upi-history", icon: "creditCard", label: "UPI Payment History" },
         { key: "settings", icon: "settings", label: "Settings" },
       ];
 
   return (
     <div
       id="main-navigation"
+      className="app-sidebar"
       style={{
         width: "250px",
-        background: "#1e293b",
-        color: "#fff",
         padding: "20px",
         position: "fixed",
         left: 0,
@@ -48,21 +49,8 @@ function Sidebar({ page, setPage, isCashier, isManager }) {
       {menuItems.map((item) => (
         <button
           key={item.key}
+          className={`app-sidebar-item${page === item.key ? " is-active" : ""}`}
           onClick={() => setPage(item.key)}
-          style={{
-            width: "100%",
-            padding: "14px",
-            marginBottom: "12px",
-            background:
-              page === item.key ? "#2563eb" : "transparent",
-            color: "white",
-            border: "none",
-            borderRadius: "8px",
-            textAlign: "left",
-            cursor: "pointer",
-            fontSize: "16px",
-            transition: "0.2s",
-          }}
         >
           <><AppIcon name={item.icon} /> {item.label}</>
         </button>

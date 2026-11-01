@@ -1,0 +1,47 @@
+.app-sidebar {
+  background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+  color: var(--sp-text-secondary);
+  border-right: 1px solid #dbe3ee;
+  box-shadow: 6px 0 18px rgb(15 23 42 / 5%);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.app-sidebar-item {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 14px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  font-size: 16px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.app-sidebar-item:hover:not(.is-active) {
+  background: #e8eef6;
+  color: var(--sp-text);
+}
+
+.app-sidebar-item.is-active {
+  background: #2563eb;
+  color: #fff;
+  box-shadow: 0 4px 10px rgb(37 99 235 / 22%);
+}
+
+[data-theme="dark"] .app-sidebar {
+  background: linear-gradient(180deg, var(--sp-surface) 0%, #182332 100%);
+  border-color: var(--sp-border);
+  box-shadow: 6px 0 18px rgb(0 0 0 / 16%);
+}
+
+[data-theme="dark"] .app-sidebar-item:hover:not(.is-active) {
+  background: var(--sp-hover);
+  color: var(--sp-text);
+}

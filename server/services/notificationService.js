@@ -15,16 +15,13 @@ const createNotifications = async (db, notifications, eventName) => {
   }
 };
 
-const notifyRoles = async (
-  db,
-  roles,
-  notification,
-  eventKey,
-  additionalUserIds = []
-) => {
+const notifyRoles = async (db, roles, notification, eventKey, additionalUserIds = [], merchantId) => {
   try {
     const recipients = await db.user.findMany({
-      where: { role: { in: roles } },
+      where: {
+        role: { in: roles },
+        ...(merchantId ? { merchantId } : {}),
+      },
       select: { id: true },
     });
     const recipientIds = new Set([
@@ -46,10 +43,13 @@ const notifyRoles = async (
   }
 };
 
-const notifyLowStock = async (db, product) => {
+const notifyLowStock = async (db, product, merchantId) => {
   try {
     const recipients = await db.user.findMany({
-      where: { role: { in: LOW_STOCK_RECIPIENT_ROLES } },
+      where: {
+        role: { in: LOW_STOCK_RECIPIENT_ROLES },
+        ...(merchantId ? { merchantId } : {}),
+      },
       select: { id: true },
     });
     const notification = {
@@ -112,7 +112,8 @@ const notifySaleCompleted = async (db, sale, cashierId) => {
       relatedId: sale.id,
     },
     `sale:${sale.id}`,
-    cashierId ? [cashierId] : []
+    cashierId ? [cashierId] : [],
+    sale.merchantId
   );
 };
 

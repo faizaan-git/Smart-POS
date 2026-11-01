@@ -25,19 +25,49 @@ enum NotificationPriority {
   LOW
 }
 
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  EXPIRED
+}
+
+enum PaymentMethod {
+  UPI
+}
+
+enum SalePaymentStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
+enum PaymentVerificationAction {
+  UTR_SUBMITTED
+  APPROVED
+  REJECTED
+  SOUNDBOX_CONFIRMED
+}
+
 model User {
-  id          Int       @id @default(autoincrement())
-  name        String
-  email       String    @unique
-  password    String
-  role        Role      @default(ADMIN)
-  isBlocked   Boolean   @default(false)
-  isOnline    Boolean   @default(false)
-  lastSeenAt  DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  notifications Notification[]
-  salesAsCashier Sale[] @relation("SaleCashier")
+  id                      Int                      @id @default(autoincrement())
+  name                    String
+  email                   String                   @unique
+  password                String
+  role                    Role                     @default(ADMIN)
+  isBlocked               Boolean                  @default(false)
+  isOnline                Boolean                  @default(false)
+  lastSeenAt              DateTime?
+  createdAt               DateTime                 @default(now())
+  updatedAt               DateTime                 @updatedAt
+  notifications           Notification[]
+  salesAsCashier          Sale[]                   @relation("SaleCashier")
+  merchantId              Int
+  merchant                Merchant                 @relation(fields: [merchantId], references: [id], onDelete: Restrict)
+  verifiedPayments        Payment[]                @relation("PaymentVerifier")
+  paymentVerificationLogs PaymentVerificationLog[] @relation("PaymentLogActor")
+
+  @@unique([id, merchantId])
 }
 
 model Product {
@@ -54,46 +84,136 @@ model Product {
 }
 
 model Sale {
-  id             Int      @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
   total          Float
-  subtotal       Float    @default(0)
-  taxAmount      Float    @default(0)
-  taxRate        Float    @default(0)
-  discountAmount Float    @default(0)
-  discountRate   Float    @default(0)
-  roundingAmount Float    @default(0)
+  subtotal       Float   @default(0)
+  taxAmount      Float   @default(0)
+  taxRate        Float   @default(0)
+  discountAmount Float   @default(0)
+  discountRate   Float   @default(0)
+  roundingAmount Float   @default(0)
   invoiceNumber  String?
-  currency       String   @default("INR")
+  currency       String  @default("INR")
 
-  paymentMethod  String   @default("Cash")
+  paymentMethod String            @default("Cash")
+  paymentStatus SalePaymentStatus @default(PAID)
 
-  cashReceived   Float?
+  cashReceived Float?
 
-  createdAt      DateTime @default(now())
+  createdAt DateTime @default(now())
 
-  items          SaleItem[]
+  items SaleItem[]
 
-  customerId     Int?
-  cashierId      Int?
+  customerId Int?
+  cashierId  Int?
+  merchantId Int
+  merchant   Merchant @relation(fields: [merchantId], references: [id], onDelete: Restrict)
 
-  customer       Customer? @relation(fields: [customerId], references: [id])
-  cashier        User?     @relation("SaleCashier", fields: [cashierId], references: [id], onDelete: SetNull)
+  customer Customer? @relation(fields: [customerId], references: [id])
+  cashier  User?     @relation("SaleCashier", fields: [cashierId], references: [id], onDelete: SetNull)
+  payments Payment[]
+
+  @@unique([id, merchantId])
+  @@index([merchantId, createdAt])
+  @@index([merchantId, paymentStatus])
+}
+
+model Merchant {
+  id              Int                      @id @default(autoincrement())
+  name            String
+  createdAt       DateTime                 @default(now())
+  updatedAt       DateTime                 @updatedAt
+  users           User[]
+  sales           Sale[]
+  paymentSettings MerchantPaymentSettings?
+  payments        Payment[]
+}
+
+model MerchantPaymentSettings {
+  id                  Int      @id @default(autoincrement())
+  merchantId          Int      @unique
+  businessName        String
+  upiId               String
+  upiDisplayName      String
+  accountHolderName   String
+  accountNumber       String
+  ifscCode            String
+  bankName            String
+  paymentInstructions String   @default("")
+  enabled             Boolean  @default(false)
+  qrExpirationMinutes Int      @default(10)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  merchant Merchant @relation(fields: [merchantId], references: [id], onDelete: Restrict)
+}
+
+model Payment {
+  id                   Int           @id @default(autoincrement())
+  merchantId           Int
+  saleId               Int
+  amount               Decimal       @db.Decimal(12, 2)
+  currency             String        @default("INR")
+  paymentMethod        PaymentMethod @default(UPI)
+  transactionReference String        @unique
+  paymentUri           String
+  merchantUpiId        String
+  merchantBusinessName String
+  merchantDisplayName  String
+  paymentInstructions  String
+  idempotencyKey       String?       @unique
+  utrNumber            String?
+  status               PaymentStatus @default(PENDING)
+  expiresAt            DateTime
+  verifiedAmount       Decimal?      @db.Decimal(12, 2)
+  verifiedAt           DateTime?
+  verifiedBy           Int?
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+
+  merchant         Merchant                 @relation(fields: [merchantId], references: [id], onDelete: Restrict)
+  sale             Sale                     @relation(fields: [saleId, merchantId], references: [id, merchantId], onDelete: Restrict)
+  verifier         User?                    @relation("PaymentVerifier", fields: [verifiedBy, merchantId], references: [id, merchantId], onDelete: Restrict)
+  verificationLogs PaymentVerificationLog[]
+
+  @@unique([id, merchantId])
+  @@index([merchantId, status, createdAt])
+  @@index([merchantId, saleId])
+  @@index([merchantId, utrNumber])
+}
+
+model PaymentVerificationLog {
+  id         Int                       @id @default(autoincrement())
+  paymentId  Int
+  merchantId Int
+  actorId    Int
+  action     PaymentVerificationAction
+  utrNumber  String?
+  amount     Decimal?                  @db.Decimal(12, 2)
+  notes      String?
+  createdAt  DateTime                  @default(now())
+
+  payment Payment @relation(fields: [paymentId, merchantId], references: [id, merchantId], onDelete: Restrict)
+  actor   User    @relation("PaymentLogActor", fields: [actorId, merchantId], references: [id, merchantId], onDelete: Restrict)
+
+  @@index([paymentId, createdAt])
+  @@index([actorId, createdAt])
 }
 
 model Notification {
-  id             Int                   @id @default(autoincrement())
-  userId         Int
-  category       NotificationCategory
-  priority       NotificationPriority  @default(NORMAL)
-  title          String
-  message        String
-  relatedType    String?
-  relatedId      Int?
-  dedupeKey      String?               @unique
-  createdAt      DateTime              @default(now())
-  readAt         DateTime?
-  archivedAt     DateTime?
+  id          Int                  @id @default(autoincrement())
+  userId      Int
+  category    NotificationCategory
+  priority    NotificationPriority @default(NORMAL)
+  title       String
+  message     String
+  relatedType String?
+  relatedId   Int?
+  dedupeKey   String?              @unique
+  createdAt   DateTime             @default(now())
+  readAt      DateTime?
+  archivedAt  DateTime?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -139,18 +259,18 @@ model BusinessSettings {
 }
 
 model POSSettings {
-  id                  Int      @id @default(autoincrement())
-  enableTax           Boolean  @default(true)
-  defaultTaxRate      Float    @default(18)
-  enableDiscount      Boolean  @default(true)
+  id                 Int      @id @default(autoincrement())
+  enableTax          Boolean  @default(true)
+  defaultTaxRate     Float    @default(18)
+  enableDiscount     Boolean  @default(true)
   defaultDiscount    Float    @default(0)
-  invoicePrefix       String   @default("INV-")
-  startingInvoiceNo   Int      @default(1001)
-  currency            String   @default("INR")
-  allowNegativeStock  Boolean  @default(false)
-  requireCustomer     Boolean  @default(false)
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  invoicePrefix      String   @default("INV-")
+  startingInvoiceNo  Int      @default(1001)
+  currency           String   @default("INR")
+  allowNegativeStock Boolean  @default(false)
+  requireCustomer    Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 }
 
 model ReceiptSettings {

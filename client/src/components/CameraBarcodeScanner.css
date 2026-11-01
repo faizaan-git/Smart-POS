@@ -44,6 +44,26 @@
   cursor: pointer;
 }
 
+.billing-camera-selector {
+  display: grid;
+  gap: 6px;
+  padding: 14px 18px 0;
+  color: var(--sp-text-secondary, #475569);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.billing-camera-selector select {
+  width: 100%;
+  min-height: 40px;
+  padding: 0 10px;
+  border: 1px solid var(--billing-border, var(--sp-border, #e2e8f0));
+  border-radius: 8px;
+  background: var(--billing-card, var(--sp-surface, #fff));
+  color: var(--sp-text, #172033);
+  font: inherit;
+}
+
 .billing-camera-preview {
   position: relative;
   margin: 18px;

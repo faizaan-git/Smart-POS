@@ -1,0 +1,213 @@
+.upi-settings-page {
+  display: grid;
+  gap: 20px;
+  color: var(--sp-text);
+}
+
+.upi-settings-title h2 {
+  margin: 0 0 6px;
+  color: var(--sp-text);
+  font-size: 22px;
+}
+
+.upi-settings-title p {
+  margin: 0;
+  color: var(--sp-text-muted);
+}
+
+.upi-settings-card {
+  padding: 22px;
+  color: var(--sp-text);
+  background: var(--sp-surface);
+  border: 1px solid var(--sp-border);
+  border-radius: 14px;
+  box-shadow: var(--sp-shadow);
+}
+
+.upi-settings-card h2 {
+  margin: 0 0 6px;
+  color: var(--sp-text);
+}
+
+.upi-settings-card > p,
+.upi-history-heading p {
+  margin: 0 0 18px;
+  color: var(--sp-text-muted);
+}
+
+.upi-settings-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.upi-setting-field,
+.upi-payment-filters label {
+  display: grid;
+  gap: 6px;
+  color: var(--sp-text-secondary);
+  font-weight: 650;
+}
+
+.upi-setting-field input,
+.upi-setting-field textarea,
+.upi-payment-filters input,
+.upi-payment-filters select {
+  width: 100%;
+  min-width: 0;
+  padding: 10px 12px;
+  color: var(--sp-text);
+  background: var(--sp-input-bg);
+  border: 1px solid var(--sp-border-secondary);
+  border-radius: 8px;
+}
+
+.upi-setting-field input:focus,
+.upi-setting-field textarea:focus,
+.upi-payment-filters input:focus,
+.upi-payment-filters select:focus {
+  border-color: #2563eb;
+  outline: 2px solid rgb(37 99 235 / 16%);
+  outline-offset: 1px;
+}
+
+.upi-settings-page input::placeholder {
+  color: var(--sp-text-muted);
+}
+
+.upi-instructions-field {
+  grid-column: 1 / -1;
+}
+
+.upi-enabled-toggle {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 18px 0;
+  font-weight: 700;
+}
+
+.upi-save-button,
+.upi-history-heading button {
+  padding: 9px 13px;
+  color: #fff;
+  background: #2563eb;
+  border: 0;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.upi-save-button:disabled {
+  cursor: not-allowed;
+  opacity: .6;
+}
+
+.upi-history-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.upi-payment-filters {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.upi-payment-table-wrap {
+  overflow-x: auto;
+}
+
+.upi-payment-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.upi-payment-table th,
+.upi-payment-table td {
+  padding: 11px 9px;
+  border-bottom: 1px solid var(--sp-border);
+  color: var(--sp-text-secondary);
+  vertical-align: top;
+}
+
+.upi-payment-table th {
+  color: var(--sp-text);
+  background: var(--sp-surface-secondary);
+}
+
+.upi-status-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.status-pending {
+  color: #92400e;
+  background: #fef3c7;
+}
+
+.status-success {
+  color: #166534;
+  background: #dcfce7;
+}
+
+.status-failed,
+.status-expired {
+  color: #991b1b;
+  background: #fee2e2;
+}
+
+.upi-audit-line {
+  display: block;
+  margin-top: 5px;
+  color: var(--sp-text-muted);
+}
+
+.upi-history-page .upi-settings-card {
+  padding: 24px;
+}
+
+.upi-history-page .upi-history-heading {
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.upi-history-page .upi-history-heading p {
+  margin-bottom: 0;
+}
+
+[data-theme="dark"] .upi-settings-page .status-pending {
+  color: #fde68a;
+  background: #78350f;
+}
+
+[data-theme="dark"] .upi-settings-page .status-success {
+  color: #bbf7d0;
+  background: #14532d;
+}
+
+[data-theme="dark"] .upi-settings-page .status-failed,
+[data-theme="dark"] .upi-settings-page .status-expired {
+  color: #fecaca;
+  background: #7f1d1d;
+}
+
+@media (max-width: 800px) {
+  .upi-settings-grid,
+  .upi-payment-filters {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+@media (max-width: 520px) {
+  .upi-history-page .upi-settings-card {
+    padding: 16px;
+  }
+}

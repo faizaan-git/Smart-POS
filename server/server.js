@@ -29,6 +29,8 @@ const settingsRoutes = require("./routes/settingsRoutes");
 const posSettingsRoutes = require("./routes/posSettingsRoutes");
 const receiptSettingsRoutes = require("./routes/receiptSettingsRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
+const paymentRoutes = require("./routes/paymentRoutes");
+const merchantRoutes = require("./routes/merchantRoutes");
 app.use("/api/auth", authRoutes);
 app.use("/api/cashiers", cashierRoutes);
 app.use("/api/managers", managerRoutes);
@@ -42,6 +44,8 @@ app.use("/api/settings", settingsRoutes);
 app.use("/api/pos-settings", posSettingsRoutes);
 app.use("/api/receipt-settings", receiptSettingsRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/payments", paymentRoutes);
+app.use("/api/merchant", merchantRoutes);
 // Home Route
 app.get("/", (req, res) => {
   res.json({

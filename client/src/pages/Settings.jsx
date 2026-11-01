@@ -4,6 +4,7 @@ import api from "../services/api";
 import { publishBusinessSettingsUpdated } from "../services/businessSettingsEvents";
 import PageTitle from "../components/PageTitle";
 import AppIcon from "../components/AppIcon";
+import UPIPaymentSettings from "./UPIPaymentSettings";
 import "./styles/Settings.css";
 
 function Settings() {
@@ -1370,6 +1371,8 @@ function Settings() {
         </div>
 
       </section>
+
+      <UPIPaymentSettings embedded showHistory={false} />
 
     </div>
   );

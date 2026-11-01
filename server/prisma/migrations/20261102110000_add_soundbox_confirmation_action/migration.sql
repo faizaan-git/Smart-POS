@@ -1,0 +1,1 @@
+ALTER TYPE "PaymentVerificationAction" ADD VALUE 'SOUNDBOX_CONFIRMED';

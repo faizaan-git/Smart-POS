@@ -7,14 +7,23 @@ const prisma = require("../prisma/client");
 // ===============================
 const register = async (req, res) => {
   try {
-    const name = req.body.name?.trim();
-    const email = req.body.email?.trim().toLowerCase();
-    const { password } = req.body;
+    const body = req.body || {};
+    const name = typeof body.name === "string" ? body.name.trim() : "";
+    const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
+    const password = body.password;
+    const requestedBusinessName = typeof body.businessName === "string"
+      ? body.businessName.trim()
+      : "";
+    const businessName = requestedBusinessName || `${name}'s business`;
 
-    if (!name || !email || !password) {
+    if (!name || !email || typeof password !== "string" || !password) {
       return res.status(400).json({
         message: "Name, email, and password are required",
       });
+    }
+
+    if (businessName.length > 120) {
+      return res.status(400).json({ message: "Business name must be 120 characters or fewer" });
     }
 
     if (password.length < 6) {
@@ -35,20 +44,28 @@ const register = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await prisma.user.create({
-      data: {
-        name,
-        email,
-        password: hashedPassword,
-        role: "ADMIN",
-      },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        createdAt: true,
-      },
+    const user = await prisma.$transaction(async (tx) => {
+      const merchant = await tx.merchant.create({
+        data: { name: businessName },
+      });
+
+      return tx.user.create({
+        data: {
+          name,
+          email,
+          password: hashedPassword,
+          role: "ADMIN",
+          merchantId: merchant.id,
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+          merchantId: true,
+          createdAt: true,
+        },
+      });
     });
 
     res.status(201).json({
@@ -109,6 +126,7 @@ const login = async (req, res) => {
         name: true,
         email: true,
         role: true,
+        merchantId: true,
         isBlocked: true,
         isOnline: true,
         lastSeenAt: true,

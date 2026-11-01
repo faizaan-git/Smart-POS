@@ -20,12 +20,20 @@ const seedAdmin = async () => {
   }
 
   const passwordHash = await bcrypt.hash(password, 12);
+  const merchant = await prisma.merchant.findFirst({
+    orderBy: { id: "asc" },
+  });
+  if (!merchant) {
+    throw new Error("Run Prisma migrations before creating the initial administrator");
+  }
+
   await prisma.user.create({
     data: {
       name,
       email,
       password: passwordHash,
       role: "ADMIN",
+      merchantId: merchant.id,
     },
   });
 

@@ -10,7 +10,10 @@ exports.getSalesReport = async (req, res) => {
     // ------------------------------------------
     // Build date filter
     // ------------------------------------------
-    const where = {};
+    const where = {
+      merchantId: req.user.merchantId,
+      paymentStatus: "PAID",
+    };
 
     if (startDate || endDate) {
       where.createdAt = {};

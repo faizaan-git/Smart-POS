@@ -1,4 +1,21 @@
 /* Cashiers page styles */
+.employee-list-refresh {
+  padding: 9px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+  color: #1f2937;
+  font: inherit;
+}
+
+.employee-list-refresh:hover:not(:disabled) {
+  background: #f3f4f6;
+}
+
+.employee-list-refresh:disabled {
+  opacity: 0.65;
+}
+
 [data-theme="dark"] .admin-cashiers-page {
   background: var(--sp-bg) !important;
   color: var(--sp-text);
@@ -15,8 +32,14 @@
   color: var(--sp-text);
 }
 
-[data-theme="dark"] .admin-cashiers-page button[ type="button" ] {
+[data-theme="dark"] .admin-cashiers-page .employee-list-refresh {
+  border-color: var(--sp-border-secondary);
+  background: var(--sp-surface-secondary);
   color: var(--sp-text);
+}
+
+[data-theme="dark"] .admin-cashiers-page .employee-list-refresh:hover:not(:disabled) {
+  background: var(--sp-surface);
 }
 
 .app-page-content > .admin-cashiers-page {
