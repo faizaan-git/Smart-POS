@@ -682,17 +682,15 @@ function Billing({ isCashier = false, onOpenSettings }) {
     toast.success("UPI payment approved; bill completed");
   };
 
-  const printUpiReceipt = (sale, receiptWindow) => {
+  const printUpiReceipt = (sale, receiptWindow, paymentReference) => {
     try {
       const currentUser = JSON.parse(sessionStorage.getItem("user") || "null");
       const receiptMarkup = getThermalReceiptMarkup(sale, {
-        business: {
-          ...businessSettings,
-          businessName: upiPayment?.payment?.businessName || businessSettings.businessName,
-        },
+        business: businessSettings,
         posSettings,
         receiptSettings,
         cashierName: currentUser?.name || "",
+        paymentReference,
       });
       const receiptSize = receiptSettings.receiptSize || "80mm";
       receiptWindow.document.open();

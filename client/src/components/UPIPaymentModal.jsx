@@ -6,7 +6,6 @@ import "./UPIPaymentModal.css";
 
 function UPIPaymentModal({ payment, sale, onPaymentComplete, onPrintReceipt, onClose }) {
   const [status, setStatus] = useState(payment.status);
-  const [copied, setCopied] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const completionNotified = useRef(false);
   const onPaymentCompleteRef = useRef(onPaymentComplete);
@@ -42,17 +41,6 @@ function UPIPaymentModal({ payment, sale, onPaymentComplete, onPrintReceipt, onC
     };
   }, [payment.id]);
 
-  const copyUpiId = async () => {
-    try {
-      await navigator.clipboard.writeText(payment.upiId);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 1800);
-    } catch (error) {
-      console.error("Could not copy merchant UPI ID:", error);
-      toast.error("Clipboard access is unavailable");
-    }
-  };
-
   const approvePayment = async () => {
     const receiptWindow = window.open(
       "",
@@ -72,7 +60,7 @@ function UPIPaymentModal({ payment, sale, onPaymentComplete, onPrintReceipt, onC
       if (approvedPayment.status === "SUCCESS" && !completionNotified.current) {
         completionNotified.current = true;
         onPaymentCompleteRef.current(approvedPayment.sale);
-        onPrintReceipt(approvedPayment.sale, receiptWindow);
+        onPrintReceipt(approvedPayment.sale, receiptWindow, approvedPayment.transactionReference);
       }
     } catch (error) {
       if (!receiptWindow.closed) receiptWindow.close();
@@ -116,14 +104,6 @@ function UPIPaymentModal({ payment, sale, onPaymentComplete, onPrintReceipt, onC
         {isPending && (
           <>
             <img className="upi-payment-qr" src={payment.qrCodeDataUrl} alt="Fixed-amount UPI payment QR code" />
-            <div className="upi-merchant-details">
-              <span>Merchant UPI ID</span>
-              <strong>{payment.upiId}</strong>
-              <span>UPI display name</span>
-              <strong>{payment.displayName}</strong>
-              <button type="button" onClick={copyUpiId}>{copied ? "Copied" : "Copy UPI ID"}</button>
-            </div>
-            <a className="upi-open-app" href={payment.paymentUri}>Open UPI App</a>
             <p className="upi-reference">Payment reference: {payment.transactionReference}</p>
             <p className="upi-reference">
               QR expires: {new Date(payment.expiresAt).toLocaleString()}
@@ -137,9 +117,6 @@ function UPIPaymentModal({ payment, sale, onPaymentComplete, onPrintReceipt, onC
               <li>Check the amount before paying.</li>
               <li>Complete the payment, then return to SmartPOS.</li>
             </ol>
-            <p className="upi-pending-notice">
-              SmartPOS does not automatically verify UPI payments. Approve only after confirming that the payment was received.
-            </p>
             <p className="upi-status-line" role="status">Status: {status}</p>
             <button
               type="button"

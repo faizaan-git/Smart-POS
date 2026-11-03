@@ -73,6 +73,7 @@ export const getThermalReceiptMarkup = (
     posSettings = {},
     receiptSettings = {},
     cashierName = "",
+    paymentReference = "",
     layout = "receipt",
   } = {}
 ) => {
@@ -152,6 +153,9 @@ export const getThermalReceiptMarkup = (
     : Math.round((roundedTotal - exactTotal) * 100) / 100;
   const roundedOffLabel = roundedOffAmount > 0 ? "+" : roundedOffAmount < 0 ? "-" : "";
   const footerMessage = receiptSettings.footerMessage || "Thank you for shopping with us!";
+  const paymentReferenceDetails = sale.paymentMethod === "UPI" && paymentReference
+    ? `<div style="text-align:left;overflow-wrap:anywhere">Payment reference: ${escapeHtml(paymentReference)}</div>`
+    : "";
 
   const productTable = `<table style="width:100%;border-collapse:collapse;table-layout:fixed;font-size:inherit;${isA4Invoice ? "border:1px solid #cbd5e1" : ""}">
     <colgroup>
@@ -201,7 +205,62 @@ export const getThermalReceiptMarkup = (
       <span>Payment: ${escapeHtml(sale.paymentMethod || "Cash")}</span>
       <strong style="text-align:right;white-space:nowrap">Total: ${escapeHtml(formatCurrency(sale.total, currency, { minimumFractionDigits: 0, maximumFractionDigits: 0 }))}</strong>
     </div>
+    ${paymentReferenceDetails}
     <div style="text-align:left;overflow-wrap:anywhere">${escapeHtml(amountInWords(roundedTotal, currency))}</div>
+    <hr>
+    <p style="text-align:center">${escapeHtml(footerMessage)}</p>
+  </div>`;
+};
+
+export const getReturnReceiptMarkup = (
+  sale,
+  saleReturn,
+  { business = {}, receiptSettings = {} } = {}
+) => {
+  const currency = sale.currency || "INR";
+  const businessName = (receiptSettings.showBusinessName ?? true)
+    ? business.businessName || "SmartPOS"
+    : "";
+  const returnedItems = saleReturn.items.map((item) => {
+    const saleItem = item.saleItem;
+    return `<tr>
+      <td>${escapeHtml(saleItem?.product?.name || "Product")}</td>
+      <td style="text-align:center">${escapeHtml(item.quantity)}</td>
+      <td style="text-align:right">${escapeHtml(formatCurrency(item.refundAmount, currency))}</td>
+    </tr>`;
+  }).join("");
+  const replacementItems = saleReturn.exchangeItems.map((item) => `<tr>
+    <td>${escapeHtml(item.product?.name || "Product")}</td>
+    <td style="text-align:center">${escapeHtml(item.quantity)}</td>
+    <td style="text-align:right">${escapeHtml(formatCurrency(item.amount, currency))}</td>
+  </tr>`).join("");
+  const settlement = Number(saleReturn.settlementAmount);
+  const settlementDetails = settlement > 0
+    ? `<div style="display:flex;justify-content:space-between"><span>Balance collected (${escapeHtml(saleReturn.paymentMethod || "Payment")})</span><strong>${escapeHtml(formatCurrency(settlement, currency))}</strong></div>`
+    : settlement < 0
+      ? `<div style="display:flex;justify-content:space-between"><span>Refund due</span><strong>${escapeHtml(formatCurrency(Math.abs(settlement), currency))}</strong></div>`
+      : "<div style=\"display:flex;justify-content:space-between\"><span>Settlement</span><strong>Even exchange</strong></div>";
+  const footerMessage = receiptSettings.footerMessage || "Thank you for shopping with us!";
+
+  return `<div id="thermal-receipt" style="width:74mm;padding:4mm;background:#fff;font-family:monospace;font-size:13px">
+    ${businessName ? `<h3 style="text-align:center">${escapeHtml(businessName)}</h3>` : ""}
+    ${business.address ? `<div style="text-align:center">${escapeHtml(business.address)}</div>` : ""}
+    ${business.phone ? `<div style="text-align:center">${escapeHtml(business.phone)}</div>` : ""}
+    <hr>
+    <h3 style="text-align:center">Return / Exchange Receipt</h3>
+    <div>Adjustment: #${escapeHtml(saleReturn.id)}</div>
+    <div>Original invoice: ${escapeHtml(sale.invoiceNumber || `#${sale.id}`)}</div>
+    <div>Date: ${escapeHtml(new Date(saleReturn.createdAt).toLocaleString("en-IN"))}</div>
+    ${saleReturn.processedBy?.name ? `<div>Processed by: ${escapeHtml(saleReturn.processedBy.name)}</div>` : ""}
+    <hr>
+    ${returnedItems ? `<strong>Returned items</strong>
+      <table style="width:100%;border-collapse:collapse"><thead><tr><th style="text-align:left">Product</th><th>Qty</th><th style="text-align:right">Value</th></tr></thead><tbody>${returnedItems}</tbody></table>` : ""}
+    ${replacementItems ? `<strong>Replacement items</strong>
+      <table style="width:100%;border-collapse:collapse"><thead><tr><th style="text-align:left">Product</th><th>Qty</th><th style="text-align:right">Value</th></tr></thead><tbody>${replacementItems}</tbody></table>` : ""}
+    <hr>
+    <div style="display:flex;justify-content:space-between"><span>Returned value</span><span>${escapeHtml(formatCurrency(saleReturn.total, currency))}</span></div>
+    <div style="display:flex;justify-content:space-between"><span>Replacement total</span><span>${escapeHtml(formatCurrency(saleReturn.replacementTotal, currency))}</span></div>
+    ${settlementDetails}
     <hr>
     <p style="text-align:center">${escapeHtml(footerMessage)}</p>
   </div>`;

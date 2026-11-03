@@ -32,7 +32,19 @@ exports.getSalesHistory = async (req, res) => {
 
 
         // Customer details
-        customer: true
+        customer: true,
+        returns: {
+          orderBy: { createdAt: "desc" },
+          include: {
+            items: {
+              include: {
+                saleItem: { include: { product: true } },
+              },
+            },
+            exchangeItems: { include: { product: true } },
+            processedBy: { select: { id: true, name: true } },
+          },
+        }
 
       }
 

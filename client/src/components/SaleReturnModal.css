@@ -1,0 +1,441 @@
+.sale-return-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1250;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  overflow: auto;
+  background: rgb(15 23 42 / 65%);
+}
+
+.sale-return-modal {
+  width: min(100%, 560px);
+  max-height: calc(100vh - 40px);
+  overflow: auto;
+  padding: 24px;
+  border-radius: 14px;
+  color: #172033;
+  background: #fff;
+  box-shadow: 0 24px 70px rgb(0 0 0 / 30%);
+}
+
+.sale-return-header,
+.sale-return-item,
+.sale-return-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.sale-return-header {
+  margin-bottom: 16px;
+}
+
+.sale-return-header h2,
+.sale-return-header p {
+  margin: 0;
+}
+
+.sale-return-header p,
+.sale-return-item span {
+  color: #64748b;
+}
+
+.sale-return-header > button {
+  border: 0;
+  background: transparent;
+  color: #475569;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.sale-return-items {
+  display: grid;
+  gap: 10px;
+}
+
+.sale-return-item {
+  padding: 12px 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.sale-return-item > div {
+  display: grid;
+  gap: 4px;
+}
+
+.sale-return-item label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sale-exchange-section {
+  display: grid;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.sale-exchange-section > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sale-exchange-section h3,
+.sale-exchange-section p {
+  margin: 0;
+}
+
+.sale-exchange-section p {
+  margin-top: 4px;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.sale-exchange-search {
+  display: grid;
+  gap: 6px;
+}
+
+.sale-exchange-search > span,
+.sale-exchange-barcode-row label > span {
+  font-weight: 700;
+}
+
+.sale-exchange-search input,
+.sale-exchange-barcode-row input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.sale-exchange-search-results {
+  display: grid;
+  max-height: 220px;
+  overflow: auto;
+  margin: -6px 0 0;
+  padding: 0;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  list-style: none;
+}
+
+.sale-exchange-search-results li + li {
+  border-top: 1px solid #e2e8f0;
+}
+
+.sale-exchange-search-results button {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 0;
+  text-align: left;
+}
+
+.sale-exchange-search-results button:disabled {
+  cursor: not-allowed;
+  opacity: .6;
+}
+
+.sale-exchange-search-results button > span:first-child {
+  display: grid;
+  gap: 3px;
+}
+
+.sale-exchange-search-results small,
+.sale-exchange-search-empty {
+  color: #64748b;
+  font-size: 12px;
+}
+
+.sale-exchange-search-empty {
+  padding: 12px;
+}
+
+.sale-exchange-barcode-row {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sale-exchange-barcode-row label {
+  display: grid;
+  min-width: 220px;
+  flex: 1;
+  gap: 6px;
+}
+
+.sale-exchange-barcode-row > button {
+  min-height: 38px;
+}
+
+.sale-exchange-section button,
+.sale-exchange-item button {
+  padding: 8px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #fff;
+  color: #334155;
+  cursor: pointer;
+}
+
+.sale-exchange-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sale-exchange-product-copy {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.sale-exchange-product-copy strong {
+  overflow-wrap: anywhere;
+}
+
+.sale-exchange-product-copy span {
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.sale-exchange-item select {
+  min-width: 0;
+  flex: 1;
+  padding: 9px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.sale-exchange-item label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.sale-exchange-item input {
+  width: 60px;
+  padding: 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+}
+
+.sale-exchange-settlement {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px 12px;
+  margin-top: 18px;
+  padding: 14px;
+  border-radius: 8px;
+  background: #f1f5f9;
+}
+
+.sale-exchange-settlement span {
+  color: #475569;
+}
+
+.sale-exchange-payment {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+}
+
+.sale-exchange-payment > label:first-child {
+  display: grid;
+  gap: 6px;
+  font-weight: 700;
+}
+
+.sale-exchange-payment select {
+  padding: 9px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.sale-exchange-payment-confirmation {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 1.45;
+}
+
+.sale-exchange-payment-confirmation input {
+  margin-top: 4px;
+}
+
+.sale-return-item input {
+  width: 76px;
+  padding: 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+}
+
+.sale-return-note {
+  padding: 12px;
+  border-radius: 8px;
+  color: #334155;
+  background: #f1f5f9;
+  line-height: 1.5;
+}
+
+.sale-return-history {
+  display: grid;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.sale-return-history h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.sale-return-history-entry {
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.sale-return-history-entry > div {
+  display: grid;
+  gap: 4px;
+}
+
+.sale-return-history-entry span {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.sale-return-history-entry ul {
+  margin: 8px 0 0;
+  padding-left: 20px;
+}
+
+.sale-return-actions {
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.sale-return-actions button {
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 7px;
+  color: #fff;
+  background: #2563eb;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.sale-return-actions button:first-child {
+  color: #334155;
+  background: #e2e8f0;
+}
+
+.sale-return-actions button:disabled,
+.sale-return-header > button:disabled {
+  cursor: wait;
+  opacity: .65;
+}
+
+[data-theme="dark"] .sale-return-modal {
+  border: 1px solid var(--sp-border);
+  color: var(--sp-text);
+  background: var(--sp-surface);
+}
+
+[data-theme="dark"] .sale-return-item {
+  border-color: var(--sp-border);
+}
+
+[data-theme="dark"] .sale-return-history-entry {
+  border-color: var(--sp-border);
+}
+
+[data-theme="dark"] .sale-return-header p,
+[data-theme="dark"] .sale-return-item span,
+[data-theme="dark"] .sale-return-history-entry span {
+  color: var(--sp-text-muted);
+}
+
+[data-theme="dark"] .sale-return-note {
+  color: var(--sp-text-secondary);
+  background: var(--sp-surface-secondary);
+}
+
+[data-theme="dark"] .sale-exchange-section p,
+[data-theme="dark"] .sale-exchange-settlement span {
+  color: var(--sp-text-muted);
+}
+
+[data-theme="dark"] .sale-exchange-settlement {
+  background: var(--sp-surface-secondary);
+}
+
+[data-theme="dark"] .sale-exchange-payment {
+  border-color: var(--sp-border);
+}
+
+[data-theme="dark"] .sale-exchange-item select,
+[data-theme="dark"] .sale-exchange-item input,
+[data-theme="dark"] .sale-exchange-payment select,
+[data-theme="dark"] .sale-exchange-search input,
+[data-theme="dark"] .sale-exchange-barcode-row input {
+  border-color: var(--sp-border);
+  color: var(--sp-text);
+  background: var(--sp-surface);
+}
+
+[data-theme="dark"] .sale-exchange-search-results,
+[data-theme="dark"] .sale-exchange-search-results li + li {
+  border-color: var(--sp-border);
+}
+
+[data-theme="dark"] .sale-exchange-search-results small,
+[data-theme="dark"] .sale-exchange-search-empty,
+[data-theme="dark"] .sale-exchange-product-copy span {
+  color: var(--sp-text-muted);
+}
+
+[data-theme="dark"] .sale-exchange-section button,
+[data-theme="dark"] .sale-exchange-item button {
+  border-color: var(--sp-border);
+  color: var(--sp-text);
+  background: var(--sp-surface);
+}
+
+@media (max-width: 520px) {
+  .sale-return-modal {
+    padding: 18px 14px;
+  }
+
+  .sale-return-item {
+    align-items: flex-start;
+  }
+
+  .sale-exchange-item {
+    flex-wrap: wrap;
+  }
+
+  .sale-exchange-item select {
+    flex-basis: 100%;
+  }
+}

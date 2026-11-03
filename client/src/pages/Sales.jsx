@@ -38,14 +38,10 @@ function Sales() {
 
 
   const filteredSales = sales.filter((sale) => {
-
-    return sale.id
-      .toString()
-      .includes(search);
-
+    const query = search.trim().toLowerCase();
+    return sale.id.toString().includes(query) ||
+      sale.invoiceNumber?.toLowerCase().includes(query);
   });
-
-
 
   return (
 
@@ -55,17 +51,16 @@ function Sales() {
 
 
       <input
-
         type="text"
-        inputMode="numeric"
-        pattern="[0-9]*"
-        aria-label="Search invoice number"
+      inputMode="numeric"
+      pattern="[0-9]*"
+      aria-label="Search invoice number or sale ID"
 
-        placeholder="Search Invoice ID..."
+        placeholder="Search invoice number or sale ID..."
 
         value={search}
 
-        onChange={(e)=>setSearch(e.target.value.replace(/\D/g, ""))}
+        onChange={(e)=>setSearch(e.target.value)}
 
         style={{
           padding:"12px",
@@ -146,7 +141,6 @@ function Sales() {
             (
 
               filteredSales.map((sale)=>(
-
                 <tr key={sale.id}>
 
                   <td>
@@ -174,7 +168,6 @@ function Sales() {
 
 
                   <td>
-
                     <button
 
                       onClick={() =>
@@ -193,7 +186,6 @@ function Sales() {
                     >
 
                       View
-
                     </button>
 
 
@@ -229,13 +221,10 @@ function Sales() {
         )
       }
 
-
-
     </div>
 
   );
 
 }
-
 
 export default Sales;

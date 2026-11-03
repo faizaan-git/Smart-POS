@@ -15,6 +15,7 @@ function Sidebar({ page, setPage, isCashier, isManager }) {
         { key: "sales", icon: "invoice", label: "Sales" },
         { key: "reports", icon: "chartLine", label: "Reports" },
         { key: "customers", icon: "users", label: "Customers" },
+        { key: "returns", icon: "receipt", label: "Returns" },
       ]
     : [
         { key: "dashboard", icon: "chart", label: "Dashboard" },
@@ -26,6 +27,7 @@ function Sidebar({ page, setPage, isCashier, isManager }) {
         { key: "cashiers", icon: "user", label: "Cashiers" },
         { key: "managers", icon: "manager", label: "Managers" },
         { key: "upi-history", icon: "creditCard", label: "UPI Payment History" },
+        { key: "returns", icon: "receipt", label: "Returns" },
         { key: "settings", icon: "settings", label: "Settings" },
       ];
 

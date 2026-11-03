@@ -6,6 +6,7 @@ const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Products = lazy(() => import("./pages/Products"));
 const Billing = lazy(() => import("./pages/Billing"));
 const Sales = lazy(() => import("./pages/Sales"));
+const Returns = lazy(() => import("./pages/Returns"));
 const Reports = lazy(() => import("./pages/Reports"));
 const Customers = lazy(() => import("./pages/Customers"));
 const Settings = lazy(() => import("./pages/Settings"));
@@ -32,8 +33,8 @@ const notifySessionClosed = (token) =>
   });
 
 const pagesByRole = {
-  ADMIN: ["dashboard", "billing", "products", "sales", "reports", "customers", "cashiers", "managers", "upi-history", "settings"],
-  MANAGER: ["dashboard", "billing", "products", "sales", "reports", "customers"],
+  ADMIN: ["dashboard", "billing", "products", "sales", "reports", "customers", "cashiers", "managers", "upi-history", "returns", "settings"],
+  MANAGER: ["dashboard", "billing", "products", "sales", "reports", "customers", "returns"],
   CASHIER: ["billing", "cashier-settings"],
 };
 
@@ -265,6 +266,8 @@ function App() {
           return <Products />;
         case "sales":
           return <Sales />;
+        case "returns":
+          return <Returns />;
         case "customers":
           return <Customers />;
         case "reports":
@@ -287,6 +290,9 @@ function App() {
 
       case "sales":
         return <Sales />;
+
+      case "returns":
+        return <Returns />;
 
       case "customers":
         return <Customers />;
